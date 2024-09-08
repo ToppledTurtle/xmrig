@@ -25,7 +25,7 @@ jobs:
 
     - name: Build XMRig
       run: |
-        mkdir -p build
+        mkdir build
         cd build
         cmake ..
         make -j$(nproc)
@@ -34,4 +34,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: xmrig-linux-binary
-        path: build/xmrig
+        path: build/
