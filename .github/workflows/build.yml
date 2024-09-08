@@ -1,0 +1,37 @@
+name: Build XMRig
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  repository_dispatch:
+    types: [sync]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        repository: ToppledTurtle/xmrig
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y git cmake build-essential libuv1-dev libssl-dev libhwloc-dev
+
+    - name: Build XMRig
+      run: |
+        mkdir -p xmrig/build
+        cd xmrig/build
+        cmake ..
+        make -j$(nproc)
+
+    - name: Upload binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: xmrig-linux-binary
+        path: xmrig/build/xmrig
